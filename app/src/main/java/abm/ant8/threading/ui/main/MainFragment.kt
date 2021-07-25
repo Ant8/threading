@@ -46,10 +46,12 @@ class MainFragment : Fragment() {
             .apply {
                 dataBinding.viewmodel = this
             }
+
+        viewModel.requirePermissionsLiveData.observe(viewLifecycleOwner, { requirePermissions() })
         // TODO: Use the ViewModel
     }
 
-    fun handleStartClicked(view: View) {
+    private fun requirePermissions() {
         when {
             ContextCompat.checkSelfPermission(
                 requireContext(),
