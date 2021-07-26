@@ -4,6 +4,7 @@ import abm.ant8.threading.databinding.MainFragmentBinding
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,10 @@ class MainFragment : Fragment() {
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean -> }
+        ) { isGranted: Boolean ->
+//            todo - correctly handle refusal
+            requirePermissions()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +51,9 @@ class MainFragment : Fragment() {
                 dataBinding.viewmodel = this
             }
 
-        viewModel.requirePermissionsLiveData.observe(viewLifecycleOwner, { requirePermissions() })
-        // TODO: Use the ViewModel
+        viewModel.requirePermissionsLiveData.observe(viewLifecycleOwner, {
+            requirePermissions()
+        })
     }
 
     private fun requirePermissions() {
@@ -57,7 +62,7 @@ class MainFragment : Fragment() {
                 requireContext(),
                 REQUIRED_PERMISSION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                viewModel.checkThreadsPrerequisites()
+                viewModel.startThreads()
             }
             else -> {
                 requestPermissionLauncher.launch(REQUIRED_PERMISSION)
