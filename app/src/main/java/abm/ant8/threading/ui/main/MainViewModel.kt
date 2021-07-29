@@ -37,10 +37,10 @@ class MainViewModel
         }
     }
 
-    fun startThreads() {
+    fun startThreads(locationInterval: Int, batteryInterval: Int) {
         Log.d(TAG, "should start threads")
-        startLocationJob()
-        startBatteryJob()
+        startLocationJob(locationInterval)
+        startBatteryJob(batteryInterval)
     }
 
     fun stopThreads() {
@@ -51,7 +51,7 @@ class MainViewModel
         batteryJob = null
     }
 
-    private fun startLocationJob() {
+    private fun startLocationJob(intervalInSeconds: Int) {
         if (locationJob == null) {
             locationJob = viewModelScope.launch(newSingleThreadContext("T1 - location")) {
                 while (isActive) {
@@ -59,13 +59,13 @@ class MainViewModel
 
                     Log.d(TAG, locationRepository.getLocation().toString())
 
-                    delay(3000)
+                    delay(intervalInSeconds * 1000L)
                 }
             }
         }
     }
 
-    private fun startBatteryJob() {
+    private fun startBatteryJob(intervalInSeconds: Int) {
         if (batteryJob == null) {
             batteryJob = viewModelScope.launch(newSingleThreadContext("T2 - battery")) {
                 while (isActive) {
@@ -73,7 +73,7 @@ class MainViewModel
 
                     Log.d(TAG, batteryRepository.getBatteryLevel().toString())
 
-                    delay(3000)
+                    delay(intervalInSeconds * 1000L)
                 }
             }
         }
