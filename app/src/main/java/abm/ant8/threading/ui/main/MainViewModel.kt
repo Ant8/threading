@@ -2,6 +2,7 @@ package abm.ant8.threading.ui.main
 
 import abm.ant8.threading.battery.BatteryRepository
 import abm.ant8.threading.location.LocationRepository
+import abm.ant8.threading.networking.NetworkingRepository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.actor
 import javax.inject.Inject
 
 @ObsoleteCoroutinesApi
@@ -17,10 +20,13 @@ class MainViewModel
 @Inject constructor(
     private val locationRepository: LocationRepository,
     private val batteryRepository: BatteryRepository,
+    private val networkingRepository: NetworkingRepository,
 ) : ViewModel() {
 
     private var locationJob: Job? = null
     private var batteryJob: Job? = null
+    private var resultsSendingJob: Job? = null
+    private var resultsCollectingActor: SendChannel<String>? = null
 
     val requirePermissionsLiveData: LiveData<Unit> = MutableLiveData()
 
@@ -37,10 +43,16 @@ class MainViewModel
         }
     }
 
-    fun startThreads(locationInterval: Int, batteryInterval: Int) {
+    fun startThreads(
+        locationInterval: Int,
+        batteryInterval: Int,
+        queueCapacity: Int,
+        url: String
+    ) {
         Log.d(TAG, "should start threads")
         startLocationJob(locationInterval)
         startBatteryJob(batteryInterval)
+        startCollectingResults(queueCapacity, url)
     }
 
     fun stopThreads() {
@@ -57,7 +69,10 @@ class MainViewModel
                 while (isActive) {
                     Log.d(TAG, "should poll last known position")
 
-                    Log.d(TAG, locationRepository.getLocation().toString())
+                    locationRepository.getLocation().toString().let {
+                        Log.d(TAG, it)
+                        resultsCollectingActor?.send(it)
+                    }
 
                     delay(intervalInSeconds * 1000L)
                 }
@@ -71,9 +86,28 @@ class MainViewModel
                 while (isActive) {
                     Log.d(TAG, "should poll last known battery state")
 
-                    Log.d(TAG, batteryRepository.getBatteryLevel().toString())
+                    batteryRepository.getBatteryLevel().toString().let {
+                        Log.d(TAG, it)
+                        resultsCollectingActor?.send(it)
+                    }
 
                     delay(intervalInSeconds * 1000L)
+                }
+            }
+        }
+    }
+
+    private fun startCollectingResults(capacity: Int, url: String) {
+        val context = newSingleThreadContext("T3 - collecting")
+
+        resultsCollectingActor = viewModelScope.actor(context = context, capacity = capacity) {
+            val results = ArrayList<String>(capacity)
+            for (msg in channel) {
+                results += msg
+                if (results.size == capacity) {
+                    Log.d(TAG, "should send the results")
+                    networkingRepository.send(url, results)
+                    results.clear()
                 }
             }
         }

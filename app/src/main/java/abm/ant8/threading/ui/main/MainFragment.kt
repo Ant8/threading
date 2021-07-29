@@ -68,7 +68,9 @@ class MainFragment : Fragment() {
                 try {
                     val locationInterval = dataBinding.locationIntervalValue.text.toString().toInt()
                     val batteryInterval = dataBinding.batteryIntervalValue.text.toString().toInt()
-                    viewModel.startThreads(locationInterval, batteryInterval)
+                    val queueCapacity = dataBinding.queueCapacityValue.text.toString().toInt()
+                    val url = dataBinding.urlValue.text.toString()
+                    viewModel.startThreads(locationInterval, batteryInterval, queueCapacity, url)
                 } catch (e: NumberFormatException) {
                     Toast.makeText(requireContext(), getString(R.string.invalid_input_caption), Toast.LENGTH_LONG).show()
                 }
