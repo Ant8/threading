@@ -20,8 +20,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
     override fun onCleared() {
         super.onCleared()
 
-        locationJob?.cancel()
-        locationJob = null
+        stopThreads()
     }
 
     fun checkThreadsPrerequisites() {
@@ -44,6 +43,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 }
             }
         }
+    }
+
+    fun stopThreads() {
+        locationJob?.cancel()
+        locationJob = null
     }
 
     companion object {
