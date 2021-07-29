@@ -17,9 +17,7 @@
 
         <TextView
             android:id="@+id/urlLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            style="@style/TextView.Label"
             android:text="@string/url_label"
             app:layout_constraintBaseline_toBaselineOf="@id/urlValue"
             app:layout_constraintEnd_toStartOf="@id/urlValue"
@@ -38,9 +36,7 @@
 
         <TextView
             android:id="@+id/batteryIntervalLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            style="@style/TextView.Label"
             android:text="@string/battery_label"
             app:layout_constraintBaseline_toBaselineOf="@id/batteryIntervalValue"
             app:layout_constraintEnd_toStartOf="@id/batteryIntervalValue"
@@ -58,9 +54,7 @@
 
         <TextView
             android:id="@+id/locationIntervalLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            style="@style/TextView.Label"
             android:text="@string/location_label"
             app:layout_constraintBaseline_toBaselineOf="@id/locationIntervalValue"
             app:layout_constraintEnd_toStartOf="@id/locationIntervalValue"
