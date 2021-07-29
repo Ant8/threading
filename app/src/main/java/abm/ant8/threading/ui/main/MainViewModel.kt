@@ -25,7 +25,6 @@ class MainViewModel
 
     private var locationJob: Job? = null
     private var batteryJob: Job? = null
-    private var resultsSendingJob: Job? = null
     private var resultsCollectingActor: SendChannel<String>? = null
 
     val requirePermissionsLiveData: LiveData<Unit> = MutableLiveData()
@@ -61,6 +60,8 @@ class MainViewModel
         locationJob = null
         batteryJob?.cancel()
         batteryJob = null
+        resultsCollectingActor?.close()
+        resultsCollectingActor = null
     }
 
     private fun startLocationJob(intervalInSeconds: Int) {
