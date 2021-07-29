@@ -6,5 +6,7 @@ interface NetworkingRepository {
 
 class NetworkingRepositoryImpl(private val api: NetworkingApi) : NetworkingRepository {
     override suspend fun send(url: String, results: List<String>) =
-        api.send(url, results)
+        try {
+            api.send(url, RequestBody(results))
+        } catch (e: Exception) { }
 }

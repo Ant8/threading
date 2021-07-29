@@ -32,7 +32,7 @@
             app:layout_constraintBottom_toTopOf="@id/queueCapacityValue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/urlLabel"
-            android:text="http://localhost/"
+            android:text="https://localhost/"
             tools:ignore="HardcodedText" />
 
 

@@ -6,5 +6,5 @@ import retrofit2.http.Url
 
 interface NetworkingApi {
     @POST
-    suspend fun send(@Url url: String, @Body results: List<String>)
+    suspend fun send(@Url url: String, @Body results: RequestBody)
 }
