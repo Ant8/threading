@@ -31,7 +31,9 @@
             android:layout_marginVertical="16dp"
             app:layout_constraintBottom_toTopOf="@id/queueCapacityValue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/urlLabel" />
+            app:layout_constraintStart_toEndOf="@id/urlLabel"
+            android:text="http://localhost/"
+            tools:ignore="HardcodedText" />
 
 
         <TextView
