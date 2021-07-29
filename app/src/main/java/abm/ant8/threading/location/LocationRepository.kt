@@ -14,7 +14,6 @@ interface LocationRepository {
     suspend fun getLocation(): Location
 }
 
-@ActivityRetainedScoped
 class LocationRepositoryImpl
 @Inject constructor(context: Context) : LocationRepository {
     //    we assume google play services are present on host
