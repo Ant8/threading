@@ -5,10 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 @ObsoleteCoroutinesApi
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor() : ViewModel() {
 
     private var locationJob: Job? = null
 
@@ -34,6 +37,8 @@ class MainViewModel : ViewModel() {
             locationJob = viewModelScope.launch(newSingleThreadContext("T1 - location")) {
                 while (isActive) {
                     Log.d(TAG, "should poll last known position")
+
+//                    Log.d(TAG, locationRepository.getLocation().toString())
 
                     delay(3000)
                 }

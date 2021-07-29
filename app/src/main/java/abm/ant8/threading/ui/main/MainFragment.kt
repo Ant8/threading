@@ -11,10 +11,13 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 
 @ObsoleteCoroutinesApi
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     companion object {
@@ -23,7 +26,7 @@ class MainFragment : Fragment() {
         private const val REQUIRED_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var dataBinding: MainFragmentBinding
 
     private val requestPermissionLauncher =
@@ -48,10 +51,7 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-            .apply {
-                dataBinding.viewmodel = this
-            }
+        dataBinding.viewmodel = viewModel
 
         viewModel.requirePermissionsLiveData.observe(viewLifecycleOwner, {
             requirePermissions()

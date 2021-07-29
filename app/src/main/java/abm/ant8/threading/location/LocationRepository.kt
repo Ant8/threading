@@ -1,9 +1,10 @@
-package abm.ant8.threading.ui.main
+package abm.ant8.threading.location
 
 import android.content.Context
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -13,7 +14,9 @@ interface LocationRepository {
     suspend fun getLocation(): Location
 }
 
-class LocationRepositoryImpl @Inject constructor(context: Context) : LocationRepository {
+@ActivityRetainedScoped
+class LocationRepositoryImpl
+@Inject constructor(context: Context) : LocationRepository {
     //    we assume google play services are present on host
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
