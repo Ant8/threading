@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Threading</string>
+    <string name="invalid_input_caption">please input integers</string>
+    <string name="url_label">URL</string>
+    <string name="battery_label">battery polling interval in seconds</string>
+    <string name="location_label">Location polling interval in seconds</string>
+    <string name="start_button_caption">start</string>
+    <string name="stop_button_caption">stop</string>
 </resources>

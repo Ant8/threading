@@ -1,5 +1,6 @@
 package abm.ant8.threading.ui.main
 
+import abm.ant8.threading.R
 import abm.ant8.threading.databinding.MainFragmentBinding
 import android.Manifest
 import android.content.pm.PackageManager
@@ -69,7 +70,7 @@ class MainFragment : Fragment() {
                     val batteryInterval = dataBinding.batteryIntervalValue.text.toString().toInt()
                     viewModel.startThreads(locationInterval, batteryInterval)
                 } catch (e: NumberFormatException) {
-                    Toast.makeText(requireContext(), "please input integers", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), getString(R.string.invalid_input_caption), Toast.LENGTH_LONG).show()
                 }
             }
             else -> {
