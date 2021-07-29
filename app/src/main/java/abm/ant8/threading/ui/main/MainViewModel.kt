@@ -1,5 +1,6 @@
 package abm.ant8.threading.ui.main
 
+import abm.ant8.threading.location.LocationRepository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 @ObsoleteCoroutinesApi
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel
+@Inject constructor(private val locationRepository: LocationRepository) : ViewModel() {
 
     private var locationJob: Job? = null
 
@@ -37,7 +39,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 while (isActive) {
                     Log.d(TAG, "should poll last known position")
 
-//                    Log.d(TAG, locationRepository.getLocation().toString())
+                    Log.d(TAG, locationRepository.getLocation().toString())
 
                     delay(3000)
                 }
