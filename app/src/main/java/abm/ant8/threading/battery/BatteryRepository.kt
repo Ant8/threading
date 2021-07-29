@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-import javax.inject.Inject
 
 interface BatteryRepository {
     suspend fun getBatteryLevel(): Float
 }
 
-class BatteryRepositoryImpl
-@Inject constructor(private val context: Context) : BatteryRepository {
+class BatteryRepositoryImpl(private val context: Context) : BatteryRepository {
     override suspend fun getBatteryLevel(): Float {
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
             context.registerReceiver(null, ifilter)
