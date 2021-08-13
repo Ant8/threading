@@ -3,6 +3,7 @@ package abm.ant8.threading.ui.main
 import abm.ant8.threading.battery.BatteryRepository
 import abm.ant8.threading.location.LocationRepository
 import abm.ant8.threading.networking.NetworkingRepository
+import abm.ant8.threading.update.UpdateRepo
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ class MainViewModel
     private val locationRepository: LocationRepository,
     private val batteryRepository: BatteryRepository,
     private val networkingRepository: NetworkingRepository,
+    private val updateRepo: UpdateRepo,
 ) : ViewModel() {
 
     private var locationJob: Job? = null
@@ -52,6 +54,13 @@ class MainViewModel
         startLocationJob(locationInterval)
         startBatteryJob(batteryInterval)
         startCollectingResults(queueCapacity, url)
+        checkForUpdates()
+    }
+
+    private fun checkForUpdates() {
+        updateRepo.getUpdateStatus()
+            .doOnSuccess { Log.d(TAG, "update status $it") }
+            .subscribe()
     }
 
     fun stopThreads() {
